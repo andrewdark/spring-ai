@@ -1,6 +1,7 @@
 package ua.pp.darknsoft.openai.advisors;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClientRequest;
@@ -14,6 +15,7 @@ public class TokenUsageAuditAdvisor implements CallAdvisor {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenUsageAuditAdvisor.class);
 
+    @NullMarked
     @Override
     public ChatClientResponse adviseCall(@NonNull ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
         ChatClientResponse chatClientResponse = callAdvisorChain.nextCall(chatClientRequest);
@@ -22,12 +24,13 @@ public class TokenUsageAuditAdvisor implements CallAdvisor {
             Usage usage = chatResponse.getMetadata().getUsage();
 
             if (usage != null) {
-                logger.info("Token usage details : {}", usage.toString());
+                logger.info("Token usage details : {}", usage);
             }
         }
         return chatClientResponse;
     }
 
+    @NullMarked
     @Override
     public String getName() {
         return "TokenUsageAuditAdvisor";
