@@ -4,6 +4,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.converter.MapOutputConverter;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,16 @@ public class StructuredOutPutController {
                 .prompt()
                 .user(message)
                 .call().entity(new MapOutputConverter());
+        return ResponseEntity.ok(countryCities);
+    }
+
+    @GetMapping("/chat-bean-list")
+    public ResponseEntity<List<CountryCities>> chatBeanList(@RequestParam("message") String message) {
+        List<CountryCities> countryCities = chatClient
+                .prompt()
+                .user(message)
+                .call().entity(new ParameterizedTypeReference<List<CountryCities>>() {
+                });
         return ResponseEntity.ok(countryCities);
     }
 }
