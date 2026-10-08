@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
+
 @RestController
 @RequestMapping(value = "/api")
 public class ChatMemoryController {
@@ -22,6 +24,7 @@ public class ChatMemoryController {
         return ResponseEntity.ok(chatClient.prompt()
                 .options(OllamaChatOptions.builder().model("llama3.2").numCtx(2560))
                 .user(message)
-                .call().entity(String.class));
+                .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, username))
+                .call().content());
     }
 }
