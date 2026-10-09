@@ -75,7 +75,7 @@ public class RandomDataLoader {
                 "SWOT analysis identifies strengths, weaknesses, opportunities, and threats."
         );
         List<Document> documents = sentences.stream().map(Document::new).toList();
-        //vectorStore.add(documents);
+        vectorStore.add(documents);
         System.out.println("Loading sentences into vector store");
     }
 }
