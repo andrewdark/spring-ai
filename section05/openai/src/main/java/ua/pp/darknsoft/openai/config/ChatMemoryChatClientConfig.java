@@ -9,6 +9,7 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ua.pp.darknsoft.openai.advisors.TokenUsageAuditAdvisor;
 
 import java.util.List;
 
@@ -25,9 +26,10 @@ public class ChatMemoryChatClientConfig {
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory) {
         Advisor loggerAdvisor = new SimpleLoggerAdvisor();
         Advisor memoryAdvisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
+        Advisor tokenUsageAdvisor = new TokenUsageAuditAdvisor();
 
         return chatClientBuilder
-                .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor))
+                .defaultAdvisors(List.of(loggerAdvisor, memoryAdvisor, tokenUsageAdvisor))
                 .build();
     }
 }
