@@ -31,6 +31,5 @@ public class HRPolicyLoader {
         TextSplitter textSplitter =
                 TokenTextSplitter.builder().withChunkSize(200).withMaxNumChunks(400).build();
         vectorStore.add(textSplitter.split(docs));
-        System.out.println(docs.stream().map(Document::getText).collect(Collectors.joining("\n")));
     }
 }
