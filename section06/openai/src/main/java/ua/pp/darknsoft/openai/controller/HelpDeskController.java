@@ -1,10 +1,15 @@
 package ua.pp.darknsoft.openai.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ua.pp.darknsoft.openai.tools.HelpDeskTools;
+
+import java.util.Map;
+
+import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 
 @RestController
 @RequestMapping("/api/tools")
@@ -15,5 +20,17 @@ public class HelpDeskController {
     public HelpDeskController(@Qualifier("helpDeskChatClient") ChatClient chatClient, HelpDeskTools helpDeskTools) {
         this.chatClient = chatClient;
         this.helpDeskTools = helpDeskTools;
+    }
+
+    @GetMapping("/help-desk")
+    public ResponseEntity<String> helpDesk(@RequestHeader("username") String username, @RequestParam("message") String message) {
+        String answer = chatClient.prompt()
+                .options(OllamaChatOptions.builder().model("llama3.2").numCtx(2560))
+                .advisors(a -> a.param(CONVERSATION_ID, username))
+                .user(message)
+                .tools(helpDeskTools)
+                .toolContext(Map.of("username", username))
+                .call().content();
+        return ResponseEntity.ok(answer);
     }
 }
