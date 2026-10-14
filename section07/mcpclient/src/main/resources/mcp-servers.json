@@ -1,11 +1,11 @@
 {
   "mcpServers": {
     "filesystem": {
-      "command": "npx",
+      "command": "C:\\Program Files\\nodejs\\npx.cmd",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/dark/mcp"
+        "C:\\Users\\dark\\mcp"
       ]
     }
   }
